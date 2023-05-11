@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Critial Mass - City Nav Test</title>
+
+  <style type="text/css">
+    :root {
+      --black: #050505;
+      --text: #9B9B9B;
+      --line: #D6D6D6;
+      --blue: #007AFF;
+
+      --nav-height: 44px;
+    }
+
+    body {
+      margin: 0 auto;
+      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    }
+
+    #nav-toggle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      height: var(--nav-height);
+
+      text-align: center;
+      color: var(--text);
+    }
+
+    #nav {
+      width: 100%;
+      max-width: 936px;
+      margin: 0 auto;
+    }
+
+    #nav__list {
+      display: none;
+      position: absolute;
+      top: var(--nav-height);
+
+      list-style: none;
+
+      width: 100%;
+      height: 0;
+
+      margin: 0 auto;
+      padding: 24px 12px;
+
+      box-sizing: border-box;
+      box-shadow: 0 4px 4px var(--line);
+
+      transition: all 0.3s ease-out;
+    }
+
+    #nav__list.opened {
+      display: block;
+      height: auto;
+    }
+
+    .nav__item {
+      display: flex;
+      align-items: center;
+
+      height: var(--nav-height);
+      margin: 0 8px;
+    }
+
+    .nav__item:not(:last-of-type) {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav__link {
+      text-decoration: none;
+      color: var(--text);
+
+      transition: background-color 0.1s linear;
+    }
+
+    .nav__link.active { 
+      color: var(--black); 
+
+      text-decoration: underline;
+      text-decoration-color: var(--black);
+      text-underline-offset: 16px;
+    }
+
+    .nav__link:hover:not(.active) {
+      color: var(--blue);
+    }
+
+    .line {
+      position: relative;
+
+      width: 100%;
+      height: 1px;
+
+      background-color: var(--line);
+    }
+
+    #line--active {
+      display: none;
+    }
+
+    @media only screen and (min-width : 834px) {
+      body {
+        padding: 24px 5%;
+      }
+
+      #nav-toggle {
+        display: none;
+      }
+
+      #nav__list {
+        position: initial;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+        
+        max-width: calc(100% - 15%);
+        height: var(--nav-height);
+        padding: 0 12px;
+
+        box-shadow: none;
+      }
+
+      .nav__item {
+        display: block;
+        height: auto;
+        text-align: center;
+      }
+
+      .nav__item:not(:last-of-type){
+        border-bottom: none;
+      }
+
+      .nav__link.active { 
+        text-decoration: none;
+      }
+
+      #line--active {
+        position: absolute;
+        display: block;
+
+        transform: translateX(0);
+
+        width: 0px;
+        height: 1px;
+
+        background-color: var(--black);
+
+        transition: width 0.1s ease-out,
+                    transform 0.3s ease-out;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 
+    √ Generate nav from JSON
+    √ Draw line
+    - Style: 
+      √ flexbox 
+      √ blue hover 
+      √ line = width of text
+    √ Line animates (slides) on click
+    - Responsive
+    √ Line readjusts on resize (may have to be resize event)
+    √ Active state -> Black w/ line
+  -->
+
+  <nav role="navigation" aria-label="Main" id="nav">
+    <!-- Mobile name toggle -->
+    <div id="nav-toggle">Menu</div>
+
+    <ul id="nav__list">
+      <!-- Nav list appended here -->
+    </ul>
+
+    <div class="line">
+      <div id="line--active"></div>
+    </div>
+  </nav>
+
+  <script type="text/javascript">
+    const citiesData = {
+          "cities": [
+            {
+              "section": "cupertino",
+              "label": "Cupertino"
+            },
+            {
+              "section": "new-york-city",
+              "label": "New York City"
+            },
+            {
+              "section": "london",
+              "label": "London"
+            },
+            {
+              "section": "amsterdam",
+              "label": "Amsterdam"
+            },
+            {
+              "section": "tokyo",
+              "label": "Tokyo"
+            },
+            {
+              "section": "hong-kong",
+              "label": "Hong Kong"
+            },
+            {
+              "section": "sydney",
+              "label": "Sydney"
+            }
+          ]
+        };
+
+    // Append list of cities from JSON
+
+    const cities = citiesData['cities'];
+
+    const nav = document.getElementById('nav__list');
+    const activeLine = document.getElementById('line--active');
+    const navToggle = document.getElementById('nav-toggle');
+
+    for (let i = 0; i < cities.length; i++) {
+      let navItem = document.createElement('li');
+
+      navItem = `<li class="nav__item">
+                  <a href="#" class="nav__link">${ cities[i].label }</a>
+                </li>`;
+
+      nav.insertAdjacentHTML('beforeend', navItem);
+    }
+
+    changeSize = element => {
+      const textWidth = element.offsetWidth;
+      activeLine.style.width = `${ textWidth }px`;
+    };
+
+    changePosition = element => {
+      // Get coordinates for clicked element and compensate for nav max-width
+      const elementCoords = element.getBoundingClientRect();
+      const navCoords = document.getElementById('nav').getBoundingClientRect();
+      const lineCoords = elementCoords.left - navCoords.left;
+
+      activeLine.style.transform = `translateX(${ lineCoords }px)`;
+    }
+
+    nav.addEventListener('click', event => {
+      const element = event.target;
+
+      if (element.classList.contains('nav__link')) {
+        changeSize(element);
+        changePosition(element);
+
+        // Remove active class and aria-selected from other elements and add to selected element
+
+        for (el of document.getElementsByClassName('active')) {
+          el.classList.remove('active');
+          el.ariaSelected = false;
+        }
+
+        element.classList.add('active');
+        element.ariaSelected = true;
+      }
+    });
+
+    navToggle.addEventListener('click', event => {
+      if (window.innerWidth <= 834) {
+        navToggle.classList.toggle('opened');
+        navToggle.innerText = navToggle.classList.contains('opened') ? 'Menu' : 'Close';
+
+        nav.classList.toggle('opened');
+        nav.ariaExpanded = navToggle.classList.contains('opened') ? true : false;
+      }
+    });
+
+    window.onresize = event => {
+      const active = document.getElementsByClassName('active')[0];
+
+      if (active) {
+        changeSize(active);
+        changePosition(active);
+      }
+
+      // Reset the menu when enlarging the screen
+      if (window.innerWidth > 834) {
+        nav.classList.remove('opened');
+        navToggle.classList.remove('opened');
+        navToggle.innerText = 'Menu';
+      }
+    }
+  </script>
+</body>
+</html>
