@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css">
 
   <style type="text/css">
+    /*  Variables  */
     :root {
       --black: #050505;
       --text: #9B9B9B;
@@ -16,6 +17,8 @@
 
       --nav-height: 44px;
     }
+
+    /*  Global styles and styles for devices below 834px  */
 
     body {
       margin: 0 auto;
@@ -108,6 +111,7 @@
       display: none;
     }
 
+    /*  Styles for screens 834px and up  */
     @media only screen and (min-width : 834px) {
       body {
         padding: 24px 5%;
@@ -164,19 +168,6 @@
   </style>
 </head>
 <body>
-  <!-- 
-    √ Generate nav from JSON
-    √ Draw line
-    - Style: 
-      √ flexbox 
-      √ blue hover 
-      √ line = width of text
-    √ Line animates (slides) on click
-    - Responsive
-    √ Line readjusts on resize (may have to be resize event)
-    √ Active state -> Black w/ line
-  -->
-
   <nav role="navigation" aria-label="Main" id="nav">
     <!-- Mobile name toggle -->
     <div id="nav-toggle">Menu</div>
@@ -230,7 +221,6 @@
 
     const nav = document.getElementById('nav__list');
     const activeLine = document.getElementById('line--active');
-    const navToggle = document.getElementById('nav-toggle');
 
     for (let i = 0; i < cities.length; i++) {
       let navItem = document.createElement('li');
@@ -264,7 +254,6 @@
         changePosition(element);
 
         // Remove active class and aria-selected from other elements and add to selected element
-
         for (el of document.getElementsByClassName('active')) {
           el.classList.remove('active');
           el.ariaSelected = false;
@@ -274,6 +263,9 @@
         element.ariaSelected = true;
       }
     });
+
+    // Handle mobile nav open/close
+    const navToggle = document.getElementById('nav-toggle');
 
     navToggle.addEventListener('click', event => {
 
@@ -294,6 +286,7 @@
       }
     });
 
+    // Handle resize event (updates the active line size/position)
     window.onresize = event => {
       const active = document.getElementsByClassName('active')[0];
 
