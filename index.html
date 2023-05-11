@@ -68,6 +68,7 @@
 
     .nav__item {
       display: flex;
+      justify-content: space-between;
       align-items: center;
 
       height: var(--nav-height);
@@ -78,7 +79,7 @@
       border-bottom: 1px solid var(--line);
     }
 
-    .nav__link {
+    .nav__link, .time {
       text-decoration: none;
       font-size: 14px;
       color: var(--text);
@@ -114,7 +115,7 @@
     /*  Styles for screens 834px and up  */
     @media only screen and (min-width : 834px) {
       body {
-        padding: 24px 5%;
+        padding: 24px 12px;
       }
 
       #nav-toggle {
@@ -129,7 +130,7 @@
         align-items: center;
         flex-wrap: nowrap;
         
-        max-width: calc(100% - 14%);
+        max-width: calc(100% - 12%);
         height: var(--nav-height);
         padding: 0 12px;
 
@@ -137,7 +138,7 @@
       }
 
       .nav__item {
-        display: block;
+        display: grid;
         height: auto;
         text-align: center;
       }
@@ -148,6 +149,11 @@
 
       .nav__link.active { 
         text-decoration: none;
+      }
+
+      .time {
+        position: relative;
+        top: 44px;
       }
 
       #line--active {
@@ -169,7 +175,7 @@
 </head>
 <body>
   <nav role="navigation" aria-label="Main" id="nav">
-    <!-- Mobile name toggle -->
+    <!-- Nav toggle (for mobile only) -->
     <div id="nav-toggle">Menu</div>
 
     <ul id="nav__list">
@@ -186,31 +192,38 @@
           "cities": [
             {
               "section": "cupertino",
-              "label": "Cupertino"
+              "label": "Cupertino",
+              "timezone": "America/Los_Angeles"
             },
             {
               "section": "new-york-city",
-              "label": "New York City"
+              "label": "New York City",
+              "timezone": "America/New_York"
             },
             {
               "section": "london",
-              "label": "London"
+              "label": "London",
+              "timezone": "Europe/London"
             },
             {
               "section": "amsterdam",
-              "label": "Amsterdam"
+              "label": "Amsterdam",
+              "timezone": "Europe/Amsterdam"
             },
             {
               "section": "tokyo",
-              "label": "Tokyo"
+              "label": "Tokyo",
+              "timezone": "Asia/Tokyo"
             },
             {
               "section": "hong-kong",
-              "label": "Hong Kong"
+              "label": "Hong Kong",
+              "timezone": "Asia/Hong_Kong"
             },
             {
               "section": "sydney",
-              "label": "Sydney"
+              "label": "Sydney",
+              "timezone": "Australia/Sydney"
             }
           ]
         };
@@ -225,8 +238,11 @@
     for (let i = 0; i < cities.length; i++) {
       let navItem = document.createElement('li');
 
+      let time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: cities[i].timezone });
+
       navItem = `<li class="nav__item">
                   <a href="#" class="nav__link">${ cities[i].label }</a>
+                  <span class="time">${ time }</span>
                 </li>`;
 
       nav.insertAdjacentHTML('beforeend', navItem);
