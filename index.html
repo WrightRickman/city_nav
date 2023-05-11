@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Critial Mass - City Nav Test</title>
 
+  <link rel="stylesheet" href="styles.css">
+
   <style type="text/css">
     :root {
       --black: #050505;
@@ -33,7 +35,7 @@
 
     #nav {
       width: 100%;
-      max-width: 936px;
+      max-width: 964px;
       margin: 0 auto;
     }
 
@@ -75,6 +77,7 @@
 
     .nav__link {
       text-decoration: none;
+      font-size: 14px;
       color: var(--text);
 
       transition: background-color 0.1s linear;
@@ -122,7 +125,7 @@
         align-items: center;
         flex-wrap: nowrap;
         
-        max-width: calc(100% - 15%);
+        max-width: calc(100% - 14%);
         height: var(--nav-height);
         padding: 0 12px;
 
@@ -280,12 +283,14 @@
 
         nav.classList.remove('opened');
         nav.ariaExpanded = false;
+        nav.ariaHidden = true;
       } else {
         navToggle.classList.add('opened');
         navToggle.innerText = 'Close';
 
         nav.classList.add('opened');
         nav.ariaExpanded = true;
+        nav.ariaHidden = false;
       }
     });
 
