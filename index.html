@@ -273,12 +273,19 @@
     });
 
     navToggle.addEventListener('click', event => {
-      if (window.innerWidth <= 834) {
-        navToggle.classList.toggle('opened');
-        navToggle.innerText = navToggle.classList.contains('opened') ? 'Menu' : 'Close';
 
-        nav.classList.toggle('opened');
-        nav.ariaExpanded = navToggle.classList.contains('opened') ? true : false;
+      if (navToggle.classList.contains('opened')) {
+        navToggle.classList.remove('opened');
+        navToggle.innerText = 'Menu';
+
+        nav.classList.remove('opened');
+        nav.ariaExpanded = false;
+      } else {
+        navToggle.classList.add('opened');
+        navToggle.innerText = 'Close';
+
+        nav.classList.add('opened');
+        nav.ariaExpanded = true;
       }
     });
 
