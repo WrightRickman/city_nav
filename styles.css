@@ -14,8 +14,6 @@
 body {
   margin: 0 auto;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-
-  background-color: lightblue;
 }
 
 #nav-toggle {
@@ -137,7 +135,7 @@ body {
     height: auto;
     text-align: center;
 
-    margin: 24px 8px;
+    margin: 24px 8px 0px 8px;
   }
 
   .nav__item:not(:last-of-type){
@@ -146,19 +144,19 @@ body {
 
   .nav__link.active { 
     text-decoration: none;
-  }xz
+  }
 
   .clock {
     position: relative;
-    top: 44px;
+    top: 28px;
   }
 
   #line--rail {
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
 
     width: var(--max-width);
-    margin: 0 auto;
   }
 
   #line--active {
