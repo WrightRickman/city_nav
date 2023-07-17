@@ -14,6 +14,8 @@
 body {
   margin: 0 auto;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+
+  background-color: lightblue;
 }
 
 #nav-toggle {
@@ -47,6 +49,8 @@ body {
   margin: 0 auto;
   padding: 24px 12px;
 
+  background-color: white;
+
   box-sizing: border-box;
   box-shadow: 0 4px 4px var(--line);
 
@@ -71,7 +75,7 @@ body {
   border-bottom: 1px solid var(--line);
 }
 
-.nav__link, .time {
+.nav__link, .clock {
   text-decoration: none;
   font-size: 14px;
   color: var(--text);
@@ -144,7 +148,7 @@ body {
     text-decoration: none;
   }xz
 
-  .time {
+  .clock {
     position: relative;
     top: 44px;
   }
