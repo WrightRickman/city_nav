@@ -1,3 +1,4 @@
+// Set global variables for container/line
 const navContainer = document.getElementById('nav__list');
 const activeLine = document.getElementById('line--active');
 
@@ -14,6 +15,7 @@ async function fetchCities() {
 }
 
 function setTime(section) {
+  // List of IANA timezones 
   const timezones = {
     'cupertino': {
       'timezone': 'America/Los_Angeles'
@@ -46,12 +48,12 @@ function setTime(section) {
 function updateTime() {
   const clocks = document.getElementsByClassName('clock');
 
-  Array.from(clocks).forEach(clock => {
+  for (clock of clocks) {
     let section = clock.getAttribute('data-section');
     let newTime = setTime(section);
 
     clock.innerText = newTime;
-  });
+  };
 }
 
 // Build navigation based on JSON list of cities
@@ -61,7 +63,7 @@ async function buildCitiesNav() {
 
   let html = '';
 
-  cities.forEach(city => {
+  cities.forEach((city) => {
     let time = setTime(city.section);
 
     let navItem = `<li class="nav__item">
@@ -75,18 +77,18 @@ async function buildCitiesNav() {
   navContainer.innerHTML = html;
 }
 
-const changeSize = element => {
+const changeSize = (element) => {
   const textWidth = element.clientWidth;
   activeLine.style.width = `${ textWidth }px`;
 };
 
-const changePosition = element => {
+const changePosition = (element) => {
   const elementCoords = element.offsetLeft;
   activeLine.style.transform = `translateX(${ elementCoords }px)`;
 }
 
 async function setUpEvents() {
-  navContainer.addEventListener('click', event => {
+  navContainer.addEventListener('click', (event) => {
     const element = event.target;
 
     if (element.classList.contains('nav__link')) {
@@ -104,7 +106,7 @@ async function setUpEvents() {
     }
   });
 
-  window.addEventListener('resize' , event => {
+  window.addEventListener('resize' , (event) => {
     const active = document.getElementsByClassName('active')[0];
 
     if (active) {
@@ -123,7 +125,7 @@ async function setUpEvents() {
   // Handle mobile nav open/close
   const navToggle = document.getElementById('nav-toggle');
 
-  navToggle.addEventListener('click', event => {
+  navToggle.addEventListener('click', (event) => {
     if (navToggle.classList.contains('opened')) {
       navToggle.classList.remove('opened');
       navToggle.innerText = 'Menu';
