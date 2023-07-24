@@ -1,46 +1,44 @@
+
 // Set global variables for container/line
 const navContainer = document.getElementById('nav__list');
 const activeLine = document.getElementById('line--active');
 
+let timezones = [];
+
 // Fetch list of cities in JSON format
-async function fetchCities() {
-  const url = './navigation.json';
+async function fetchData() {
+  const citiesUrl = './navigation.json';
+
+  // List if IANA timeones
+  const timezoneUrl = 'http://worldtimeapi.org/api/timezone';
 
   try {
-    const res = await fetch(url);
-    return await res.json();
+    const responses = await Promise.all([fetch(citiesUrl), fetch(timezoneUrl)]);
+
+    const citiesData = await responses[0].json();
+    const timezoneData = await responses[1].json();
+
+    return [citiesData, timezoneData];
   } catch (error) {
     console.error(error);
   }
 }
 
-function setTime(section) {
-  // List of IANA timezones 
-  const timezones = {
-    'cupertino': {
-      'timezone': 'America/Los_Angeles'
-    },
-    'new-york-city': {
-      'timezone': 'America/New_York'
-    },
-    'london': {
-      'timezone': 'Europe/London'
-    },
-    'amsterdam': {
-      'timezone': 'Europe/Amsterdam'
-    },
-    'tokyo': {
-      'timezone': 'Asia/Tokyo'
-    },
-    'hong-kong': {
-      'timezone': 'Asia/Hong_Kong'
-    },
-    'sydney': {
-      'timezone': 'Australia/Sydney'
-    }
-  };
+function setTime(label) {
+  let timezone = '';
 
-  const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: timezones[section].timezone });
+  switch(label) {
+    case 'Cupertino':
+      timezone = 'America/Los_Angeles';
+      break;
+    case 'Amsterdam':
+      timezone = 'CET';
+      break;
+    default:
+      timezone = timezones.filter((str) => str.includes(label))[0];
+  }
+
+  const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: timezone });
 
   return time;
 }
@@ -49,7 +47,7 @@ function updateTime() {
   const clocks = document.getElementsByClassName('clock');
 
   for (clock of clocks) {
-    let section = clock.getAttribute('data-section');
+    let section = clock.getAttribute('data-label');
     let newTime = setTime(section);
 
     clock.innerText = newTime;
@@ -58,17 +56,21 @@ function updateTime() {
 
 // Build navigation based on JSON list of cities
 async function buildCitiesNav() {
-  const citiesData = await fetchCities();
-  const cities = citiesData['cities'];
+  const data = await fetchData();
+
+  const cities = data[0]['cities'];
+  timezones = data[1];
 
   let html = '';
 
   cities.forEach((city) => {
-    const time = setTime(city.section);
+    let cleanLabel = city['label'].replace(/\s/g, '_').replace('_City', '');
+
+    let time = setTime(cleanLabel);
 
     let navItem = `<li class="nav__item">
                      <a href="#" class="nav__link">${ city.label }</a>
-                     <span class="clock" data-section="${ city.section }">${ time }</span>
+                     <span class="clock" data-label="${ cleanLabel }">${ time }</span>
                    </li>`;
 
     html += navItem;
