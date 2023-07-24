@@ -14,6 +14,8 @@
 body {
   margin: 0 auto;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+
+  background-color: lightblue;
 }
 
 #nav-toggle {
@@ -125,7 +127,7 @@ body {
     
     max-width: calc(var(--max-width) - 12%);
     height: auto;
-    padding: 0 12px;
+    padding: 0 12px 36px 12px;
 
     box-shadow: none;
   }
@@ -149,6 +151,10 @@ body {
   .clock {
     position: relative;
     top: 28px;
+  }
+
+  .line {
+    bottom: 36px;
   }
 
   #line--rail {
